@@ -47,6 +47,10 @@ class BaseHandler(tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):
         tornado.web.RequestHandler.__init__(self, *args, **kwargs)
         self.data_json = {}
+   
+    def set_default_headers(self):
+           self.set_header("Access-Control-Allow-Origin", "*")
+
 
     def prepare(self):
         """prepare data.json as converted python dict"""
@@ -78,7 +82,7 @@ class FullScanAPIHandler(BaseHandler):
     """FullScanAPIHandler processing text sent via /api/fullscan
     """
     def post(self):
-        """handles post request"""
+        """handles post request"""        
         print self.data_json
         text = self.data_json["text"]
 

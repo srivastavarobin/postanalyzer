@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+$(document).ready(function(){
+	$("p").click(function(){
+		$(this).hide();
+	});
+	$("#text").keyup(function(e) {
+		var input = $("#text").val();
+		var sendInfo = {text: input};
+		$.ajax({
+		    // the URL for the request
+		    url: "http://localhost:8889/api/fullscan",
+
+		    // the data to send (will be converted to a query string)
+		    data: JSON.stringify({text: input}),
+
+		    // whether this is a POST or GET request
+		    type: "POST",
+
+		    // the type of data we expect back
+		    dataType : "json",
+
+		    // code to run if the request succeeds;
+		    // the response is passed to the function
+		    success: function( json ) {
+				var items="";
+				items += "<p><b> Has Bad Words: </b>" + json.result.has_bad_words  + "</p>"
+				items += "<p><b> Richness of the post: </b>" + json.result.richness_of_post  + "</p>"
+				items += "<p><b> Contacts: </b>" + JSON.stringify(json.result.contacts)  + "</p>"
+				items += "<p><b> Has Qualifiers: </b>" + json.result.has_qualifier  + "</p>"
+				items += "<p><b> Has Slangs: </b>" + json.result.has_slang  + "</p>"
+				items += "<p><b> Has Link: </b>" + json.result.has_link  + "</p>"
+				items += "<p><b> URIs: </b>" + JSON.stringify(json.result.uris)  + "</p>"
+				items += "<p><b> Subphrases: </b>" + JSON.stringify(json.result.subphrases)  + "</p>"
+				items += "<p><b> Has Net Lingo: </b>" + json.result.has_net_lingo  + "</p>"
+				
+				
+				$("#content").html(items);
+		        // $( "#result" ).text( JSON.stringify(json) ).appendTo( "body" );
+		console.log(JSON.stringify(json));
+		    },
+
+		    // code to run if the request fails; the raw request and
+		    // status codes are passed to the function
+		    error: function( xhr, status ) {
+		        alert( "Sorry, there was a problem!" );
+		    },
+
+		    // code to run regardless of success or failure
+		    complete: function( xhr, status ) {
+		        alert( "The request is complete!" );
+		    }
+		});
+	});
+
+});
+</script>
+</head>
+<body>
+<h1>Enter the text for analysis</h1>
+<textarea rows="3" cols="80" id="text" value="Hello"></textarea>
+<br>
+<div id="content"></div>
+
+</body>
+</html>
